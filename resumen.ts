@@ -154,15 +154,135 @@ APP.COMPONENT.HTML
 
 
 
+MENU
+//////////////////////////////////////////////////////////////////
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" [routerLink]="['/']">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/newpersonaje']">Nuevo personaje</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/updatepersonaje']">Modificar personaje</a>
+        </li>
+        <li class="nav-item dropdown" *ngIf="series">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Series
+            </a>
+            <ul class="dropdown-menu">
+                <li><a *ngFor="let serie of series" class="dropdown-item" [routerLink]="['/serie', serie.idSerie]">{{serie.nombre}}</a></li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled">Disabled</a>
+        </li>
+        </ul>
+        <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+    </div>
+</nav>
+//////////////////////////////////////////////////////////////////
 
 
 
+CARD CON IMAGEN ARRIBA
+//////////////////////////////////////////////////////////////////
+<div>
+    <div class="card" style="width: 18rem;">
+        <img src="{{serie.imagen}}" class="card-img-top" alt="foto Personaje">
+        <div class="card-body">
+            <h5 class="card-title">{{serie.nombre}}</h5>
+            <p class="card-text">{{serie.puntuacion}}</p>
+            <a [routerLink]="['/personajes', serie.idSerie]" class="btn btn-success">Personajes</a>
+        </div>
+    </div>
+</div>
+//////////////////////////////////////////////////////////////////
 
 
 
+TABLA COMPLETA
+//////////////////////////////////////////////////////////////////
+<div style="width: 80%; margin: auto;">
+    <div *ngIf="!departamentos">
+        <img src="./../../../assets/images/loading.gif" alt="loading" style="width:100%">
+    </div>
+    <table class="table table-striped table-hover" *ngIf="departamentos">
+        <thead>
+            <tr>
+                <th>Numero</th>
+                <th>Nombre</th>
+                <th>Localidad</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let dept of departamentos">
+                <td>{{dept.numero}}</td>
+                <td>{{dept.nombre}}</td>
+                <td>{{dept.localidad}}</td>
+                <td>
+                    <a [routerLink]="['/edit', dept.numero, dept.nombre, dept.localidad]" class="btn btn-info">Modificar</a>
+                    <a [routerLink]="['/delete', dept.numero]" class="btn btn-warning">Eliminar (link)</a>
+                    <a [routerLink]="['/detalle', dept.numero]" class="btn btn-success">Detalles</a>
+                    <button (click)="eliminarDepartamento(dept.numero)" class="btn btn-danger">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+//////////////////////////////////////////////////////////////////
 
 
 
+FORMULARIO EDITAR INPUT
+//////////////////////////////////////////////////////////////////
+<div>
+    <form #modificarForm="ngForm" *ngIf="departamento">
+        <input type="hidden" name="cajanumero" #cajanumero><br/>
+        <label>Nombre</label>
+        <input type="text"name="cajanombre" #cajanombre value="{{departamento.nombre}}"><br/>
+        <label>Localidad</label>
+        <input type="text"name="cajalocalidad" #cajalocalidad value="{{departamento.localidad}}"><br/>
+
+        <button (click)="modificarDepartamento()" class="btn btn-info">Modificar</button>
+    </form>
+</div>
+//////////////////////////////////////////////////////////////////
+
+
+
+FORMULARIO EDITAR CON SELECT
+//////////////////////////////////////////////////////////////////
+<div>
+    <h1>Personajes y series</h1>
+
+    <form #updatePersonajeForm="ngForm">
+        <label>Seleccione una serie</label>
+        <select name="cajaidserie" #cajaidserie class="form-select" *ngIf="series">
+            <option *ngFor="let serie of series" value="{{serie.idSerie}}">{{serie.nombre}}</option>
+        </select>
+
+        <label>Seleccione un personaje</label>
+        <select name="cajaidpersonaje" #cajaidpersonaje class="form-select" *ngIf="series">
+            <option *ngFor="let pers of personajes" value="{{pers.idPersonaje}}">{{pers.nombre}}</option>
+        </select>
+
+        <button (click)="actualizarPersonaje()" class="btn btn-success">Insertar personaje</button>
+    </form>
+</div>
+//////////////////////////////////////////////////////////////////
 
 
 
